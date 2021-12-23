@@ -88,6 +88,7 @@ const eventRoutes = {
 export class SubstrateService implements OnModuleInit {
   private head;
   private listenStatus = false;
+  private syncOldBlock = false;
   private api: ApiPromise;
   private lastBlockNumber = 0;
   private wsProvider: WsProvider;
@@ -182,6 +183,10 @@ export class SubstrateService implements OnModuleInit {
   async syncBlock() {
     let lastBlockNumber = 1;
     try {
+      if (this.syncOldBlock) return;
+
+      this.syncOldBlock = true;
+
       lastBlockNumber = await this.queryBus.execute(
         new GetLastSubstrateBlockQuery(),
       );
@@ -241,6 +246,9 @@ export class SubstrateService implements OnModuleInit {
       }
     } catch (err) {
       this.logger.log(`Handling sync block catch : ${err.name}, ${err.message}, ${err.stack}`);
+      this.syncOldBlock = false;
+    } finally {
+      this.syncOldBlock = false;
     }
   }
 
@@ -302,6 +310,8 @@ export class SubstrateService implements OnModuleInit {
   @Interval(10 * 1000)
   async ping() {
     try {
+      if (this.syncOldBlock) return;
+      
       const currentBlock        = await this.api.rpc.chain.getBlock();
       const currentBlockNumber  = currentBlock.block.header.number.toNumber();
 
