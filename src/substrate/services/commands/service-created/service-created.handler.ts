@@ -60,7 +60,7 @@ export class ServiceCreatedHandler
         index: 'labs',
         id: ownerId,
         refresh: true,
-        retry_on_conflict: 3,
+        retry_on_conflict: 1,
         body: {
           script: {
             lang: 'painless',
