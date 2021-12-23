@@ -25,6 +25,7 @@ export class DataStakedHandler implements ICommandHandler<DataStakedCommand> {
       index: 'data-bounty',
       id: command.dataStaked.orderId,
       refresh: 'wait_for',
+      op_type: 'create',
       body: {
           order_id: command.dataStaked.orderId,
           hash_data_bounty: command.dataStaked.hashDataBounty,

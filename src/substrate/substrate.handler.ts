@@ -43,6 +43,8 @@ import {
 } from './certifications';
 import { DataStakedCommand } from './genetic-testing';
 import { ProcessEnvProxy } from 'src/common/process-env/process-env.proxy';
+import { interval } from 'rxjs';
+import { Interval } from '@nestjs/schedule';
 
 const eventRoutes = {
   labs: {
@@ -134,47 +136,47 @@ export class SubstrateService implements OnModuleInit {
   }
 
   async listenToNewBlock() {
-    await this.api.rpc.chain.subscribeNewHeads(async (header: Header) => {
-      try {
-        const blockNumber = header.number.toNumber();
-        const blockHash   = await this.api.rpc.chain.getBlockHash(blockNumber);
-
-        if (this.lastBlockNumber == 0) {
-          this.lastBlockNumber = await this.queryBus.execute(
-            new GetLastSubstrateBlockQuery(),
-          );
-        }
-
-        // check if env is development
-        if (this.process.env.NODE_ENV === 'development') {
-          // check if last_block_number is higher than next block number
-          if (this.lastBlockNumber > blockNumber) {
-            // delete all indexes
-            await this.commandBus.execute(new DeleteAllIndexesCommand());
+    try {
+      this.head = await this.api.rpc.chain.subscribeNewHeads(async (header: Header) => {
+        try {
+          const blockNumber = header.number.toNumber();
+          const blockHash   = await this.api.rpc.chain.getBlockHash(blockNumber);
+  
+          if (this.lastBlockNumber == 0) {
+            this.lastBlockNumber = await this.queryBus.execute(
+              new GetLastSubstrateBlockQuery(),
+            );
           }
+  
+          // check if env is development
+          if (this.process.env.NODE_ENV === 'development') {
+            // check if last_block_number is higher than next block number
+            if (this.lastBlockNumber > blockNumber) {
+              // delete all indexes
+              await this.commandBus.execute(new DeleteAllIndexesCommand());
+            }
+          }
+  
+          if (this.lastBlockNumber == blockNumber) {
+            return;
+          } else {
+            this.lastBlockNumber = blockNumber;
+          }
+          
+          this.logger.log(`Syncing Substrate Block: ${blockNumber}`);
+  
+          await this.eventFromBlock(blockNumber, blockHash);
+          
+          await this.commandBus.execute(
+            new SetLastSubstrateBlockCommand(blockNumber),
+          );
+        } catch (err) {
+          this.logger.log(`Handling listen to new block catch : ${err.name}, ${err.message}, ${err.stack}`);
         }
-
-        if (this.lastBlockNumber == blockNumber) {
-          return;
-        } else {
-          this.lastBlockNumber = blockNumber;
-        }
-        
-        this.logger.log(`Syncing Substrate Block: ${blockNumber}`);
-
-        await this.eventFromBlock(blockNumber, blockHash);
-        
-        await this.commandBus.execute(
-          new SetLastSubstrateBlockCommand(blockNumber),
-        );
-      } catch (err) {
-        this.logger.log(`Handling listen to new block catch : ${err.name}, ${err.message}, ${err.stack}`);
-      }
-    }).then(_unsub => {
-      this.head = _unsub;
-    }).catch(err => {
+      });
+    } catch (err) {
       this.logger.log(`Event listener catch error ${err.name}, ${err.message}, ${err.stack}`);
-    });
+    }
   }
 
   async syncBlock() {
@@ -243,49 +245,75 @@ export class SubstrateService implements OnModuleInit {
   }
 
   async startListen() {
-    if (this.listenStatus) return;
-
-    this.listenStatus = true;
-
-    if (this.head) {
-      this.head();
+    try {
+      if (this.listenStatus) return;
+  
+      this.listenStatus = true;
+  
+      if (this.head) {
+        this.head();
+      }
+      
+      this.api = await ApiPromise.create({
+        provider: this.wsProvider,
+      });
+  
+      this.api.on('connected', () => {
+        this.logger.log(`Substrate API Connected`);
+      });
+  
+      this.api.on('disconnected', async () => {
+        this.logger.log(`Substrate API Disconnected`);
+        this.stopListen();
+        await this.startListen();
+      });
+  
+      this.api.on('error', async (error) => {
+        this.logger.log(`Substrate API Error: ${error}`);
+        this.stopListen();
+        await this.startListen();
+      });
+  
+      await this.api.isReady;
+  
+      await this.syncBlock();
+      this.listenToNewBlock();
+    } catch (err) {
+      this.logger.error(`start listen error: ${err}`);
     }
-    
-    this.api = await ApiPromise.create({
-      provider: this.wsProvider,
-    });
-
-    this.api.on('connected', () => {
-      this.logger.log(`Substrate API Connected`);
-    });
-
-    this.api.on('disconnected', async () => {
-      this.logger.log(`Substrate API Disconnected`);
-      await this.stopListen();
-      await this.startListen();
-    });
-
-    this.api.on('error', async (error) => {
-      this.logger.log(`Substrate API Error: ${error}`);
-      await this.stopListen();
-      await this.startListen();
-    });
-
-    await this.api.isReady;
-
-    await this.syncBlock();
-    this.listenToNewBlock();
   }
 
   stopListen() {
-    this.listenStatus = false;
-
-    if (this.api) {
-      delete this.api;
+    try {
+      this.listenStatus = false;
+  
+      if (this.api) {
+        delete this.api;
+      }
+  
+      if (this.head) {
+        this.head();
+      }
+    } catch (err) {
+      this.logger.error(`stop listen error: ${err}`);
     }
+  }
 
-    if (this.head) {
-      this.head();
+  @Interval(10 * 1000)
+  async ping() {
+    try {
+      const currentBlock        = await this.api.rpc.chain.getBlock();
+      const currentBlockNumber  = currentBlock.block.header.number.toNumber();
+
+      const diffBlockNumber = currentBlockNumber - this.lastBlockNumber;
+
+      if (diffBlockNumber > 10) {
+        this.logger.log(`Restart api when sync block stopped`);
+        this.stopListen();
+        await this.startListen();
+      }
+    } catch (err) {
+      this.logger.error(err);
     }
   }
 }

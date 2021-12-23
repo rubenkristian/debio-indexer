@@ -14,6 +14,7 @@ export class SetLastRequestServiceBlockHandler
     await this.elasticsearchService.index({
       index: 'last-block-number-request-service',
       id: 'last-block-number-request-service',
+      op_type: 'create',
       refresh: 'wait_for',
       body: {
         last_block_number: command.blockNumber,

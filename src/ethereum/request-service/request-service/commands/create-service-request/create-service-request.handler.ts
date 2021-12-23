@@ -14,6 +14,7 @@ export class CreateServiceRequestHandler
     await this.elasticsearchService.index({
       index: 'create-service-request',
       id: command.request.hash,
+      op_type: 'create',
       refresh: 'wait_for',
       body: {
         request: command.request,

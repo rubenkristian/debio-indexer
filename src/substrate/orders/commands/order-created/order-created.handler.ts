@@ -61,6 +61,7 @@ export class OrderCreatedHandler
       index: 'orders',
       refresh: 'wait_for',
       id: order.id,
+      op_type: 'create',
       body: {
         ...orderBody
       },

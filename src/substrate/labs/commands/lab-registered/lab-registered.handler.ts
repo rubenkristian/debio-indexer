@@ -16,6 +16,7 @@ export class LabRegisteredHandler
       index: 'labs',
       refresh: 'wait_for',
       id: lab.accountId,
+      op_type: 'create',
       body: {
         account_id: lab.accountId,
         services: lab.services,

@@ -15,6 +15,7 @@ export class CreateServiceRequestHandler
       index: 'create-service-request',
       id: command.request.hash,
       refresh: 'wait_for',
+      op_type: 'create',
       body: {
         request: command.request,
         blockMetadata: command.blockMetadata,

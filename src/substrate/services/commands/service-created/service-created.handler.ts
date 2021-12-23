@@ -24,7 +24,6 @@ export class ServiceCreatedHandler
       }
     });
 
-
     let serviceBody = {
       id: service.id,
       owner_id: service.ownerId,
@@ -51,6 +50,7 @@ export class ServiceCreatedHandler
         index: 'services',
         id: service.id,
         refresh: 'wait_for',
+        op_type: 'create',
         body: {
           ...serviceBody,
         },

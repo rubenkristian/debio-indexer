@@ -17,6 +17,7 @@ export class CertificationCreatedHandler
       index: 'certifications',
       refresh: 'wait_for',
       id: certification.id,
+      op_type: 'create',
       body: {
         id: certification.id,
         owner_id: certification.owner_id,
