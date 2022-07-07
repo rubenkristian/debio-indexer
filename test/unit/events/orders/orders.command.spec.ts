@@ -8,7 +8,7 @@ import {
 } from '../../../../src/substrate/events/orders';
 import { OrderStatus } from '../../../../src/substrate/models/order/order-status';
 import { Currency } from '../../../../src/substrate/models/order/currency';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { Orders } from '../../../../src/substrate/models/order/orders';
 
 jest.mock('../../../../src/substrate/models/order/orders');

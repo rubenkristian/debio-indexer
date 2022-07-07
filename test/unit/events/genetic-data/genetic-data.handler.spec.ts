@@ -10,7 +10,7 @@ import { ElasticSearchServiceProvider } from '../../mock';
 import { AddGeneticDataHandler } from '../../../../src/substrate/events/genetic-data/commands/add-genetic-data/add-genetic-data.handler';
 import { RemoveGeneticDataHandler } from '../../../../src/substrate/events/genetic-data/commands/remove-genetic-data/remove-genetic-data.handler';
 import { UpdateGeneticDataHandler } from '../../../../src/substrate/events/genetic-data/commands/update-genetic-data/update-genetic-data.handler';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 
 describe('Genetic Data Substate Event Handler', () => {
   let elasticsearchService: ElasticsearchService;

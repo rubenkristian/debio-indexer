@@ -6,7 +6,7 @@ import {
   ServiceDeletedCommand,
   ServiceUpdatedCommand,
 } from '../../../../src/substrate/events/services';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { ServiceFlow } from '../../../../src/substrate/models/service-flow';
 import { ServiceCreatedHandler } from '../../../../src/substrate/events/services/commands/service-created/service-created.handler';
 import { ServiceDeletedHandler } from '../../../../src/substrate/events/services/commands/service-deleted/service-deleted.handler';

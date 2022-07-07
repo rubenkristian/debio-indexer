@@ -15,7 +15,7 @@ import { GeneticAnalystServicesDeletedHandler } from '../../../../src/substrate/
 import { GeneticAnalystServicesUpdatedHandler } from '../../../../src/substrate/events/genetic-analyst-services/commands/genetic-analyst-services-updated/genetic-analyst-services-updated.handler';
 import { when } from 'jest-when';
 
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 
 describe('Genetic Anlaysts Services Substrate Event Handler', () => {
   let elasticsearchService: ElasticsearchService;

@@ -3,7 +3,7 @@ import {
   ServiceDeletedCommand,
   ServiceUpdatedCommand,
 } from '../../../../src/substrate/events/services';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { ServiceFlow } from '../../../../src/substrate/models/service-flow';
 import { Service } from '../../../../src/substrate/models/service/service';
 

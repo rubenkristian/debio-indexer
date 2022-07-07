@@ -17,7 +17,7 @@ import { GeneticAnalystsRegisteredHandler } from '../../../../src/substrate/even
 import { GeneticAnalystsDeletedHandler } from '../../../../src/substrate/events/genetic-analysts/commands/genetic-analysts-deleted/genetic-analysts-deleted.handler';
 import { GeneticAnalystsUpdatedHandler } from '../../../../src/substrate/events/genetic-analysts/commands/genetic-analysts-updated/genetic-analysts-updated.handler';
 
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { GeneticAnalystsStakeSuccessfulHandler } from '../../../../src/substrate/events/genetic-analysts/commands/genetic-analysts-stake-successful/genetic-analysts-stake-successful.handler';
 import { GeneticAnalystsUpdateVerificationStatusHandler } from '../../../../src/substrate/events/genetic-analysts/commands/genetic-analysts-update-verification-status/genetic-analysts-update-verification-status.handler';
 import { GeneticAnalystsRetrieveUnstakeAmountHandler } from '../../../../src/substrate/events/genetic-analysts/commands/genetic-analysts-retrieve-unstake-amount/genetic-analysts-retrieve-unstake-amount.handler';

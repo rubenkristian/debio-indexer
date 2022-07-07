@@ -3,7 +3,7 @@ import {
   RemoveGeneticDataCommand,
   UpdateGeneticDataCommand,
 } from '../../../../src/substrate/events/genetic-data';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { GeneticDataModel } from '../../../../src/substrate/models/genetic-data/genetic-data.model';
 
 jest.mock('../../../../src/substrate/models/genetic-data/genetic-data.model');

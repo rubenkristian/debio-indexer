@@ -9,7 +9,7 @@ import {
   GeneticAnalystVerificationFailedCommand,
   GeneticAnalystUnstakeSuccessfulCommand,
 } from '../../../../src/substrate/events/genetic-analysts';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { GeneticAnalystsModel } from '../../../../src/substrate/models/genetic-analysts/genetic-analysts.model';
 
 jest.mock(

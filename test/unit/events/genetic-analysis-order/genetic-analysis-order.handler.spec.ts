@@ -20,7 +20,7 @@ import { GeneticAnalysisOrderFailedHandler } from '../../../../src/substrate/eve
 import { GeneticAnalysisOrderFulfilledHandler } from '../../../../src/substrate/events/genetic-analysis-order/commands/genetic-analysis-order-fulfilled/genetic-analysis-order-fulfilled.handler';
 import { GeneticAnalysisOrderPaidHandler } from '../../../../src/substrate/events/genetic-analysis-order/commands/genetic-analysis-order-paid/genetic-analysis-order-paid.handler';
 import { GeneticAnalysisOrderRefundedHandler } from '../../../../src/substrate/events/genetic-analysis-order/commands/genetic-analysis-order-refunded/genetic-analysis-order-refunded.handler';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { when } from 'jest-when';
 
 describe('Genetic Analysis Order Substrate Event Handler', () => {

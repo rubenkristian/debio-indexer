@@ -3,7 +3,7 @@ import { OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { Event } from '@polkadot/types/interfaces';
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import { BlockMetaData } from './models/blockMetaData';
+import { BlockMetaData } from './models/block-meta-data';
 import {
   LabRegisteredCommand,
   LabUpdatedCommand,

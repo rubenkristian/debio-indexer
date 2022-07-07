@@ -7,7 +7,7 @@ import {
   GeneticAnalysisResultReadyCommand,
   GeneticAnalysisSubmittedCommand,
 } from '../../../../src/substrate/events/genetic-analysis';
-import { BlockMetaData } from '../../../../src/substrate/models/blockMetaData';
+import { BlockMetaData } from '../../../../src/substrate/models/block-meta-data';
 import { ElasticSearchServiceProvider } from '../../mock';
 
 import { GeneticAnalysisInProgressHandler } from '../../../../src/substrate/events/genetic-analysis/commands/genetic-analysis-in-progress/genetic-analysis-in-progress.handler';
