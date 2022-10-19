@@ -46,26 +46,6 @@ describe('Genetic Analyst Staked Handler Event', () => {
     expect(geneticAnalystStakedHandler).toBeDefined();
   });
 
-  it('should not called logging service create', async () => {
-    // Arrange
-    const geneticAnalyst = createMockGeneticAnalyst();
-
-    const RESULT_STATUS = true;
-
-    when(transactionLoggingServiceMock.getLoggingByHashAndStatus)
-      .calledWith(geneticAnalyst.toHuman().accountId, 19)
-      .mockReturnValue(RESULT_STATUS);
-
-    const GeneticAnalysisOrders: GeneticAnalystStakedCommand =
-      new GeneticAnalystStakedCommand([geneticAnalyst], mockBlockNumber());
-
-    await geneticAnalystStakedHandler.execute(GeneticAnalysisOrders);
-    expect(
-      transactionLoggingServiceMock.getLoggingByHashAndStatus,
-    ).toHaveBeenCalled();
-    expect(transactionLoggingServiceMock.create).not.toHaveBeenCalled();
-  });
-
   it('should called logging service create', async () => {
     // Arrange
     const geneticAnalyst = createMockGeneticAnalyst();
