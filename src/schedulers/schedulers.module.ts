@@ -15,6 +15,9 @@ import {
 import { MailerService } from './mailer/mailer.service';
 import { UnstakedService } from './unstaked/unstaked.service';
 import { MenstrualSubscriptionService } from './menstrual-subscription/menstrual-subscription.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { LabRating } from './rating/model/rating.entity';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -45,6 +48,24 @@ import { MenstrualSubscriptionService } from './menstrual-subscription/menstrual
     SubstrateModule,
     MailModule,
     EmailNotificationModule,
+    TypeOrmModule.forFeature([LabRating]),
+    BullModule.forRootAsync({
+      useFactory: async (
+        gCloudSecretManagerService: GCloudSecretManagerService<keyList>,
+      ) => {
+        return {
+          redis: {
+            host: gCloudSecretManagerService.getSecret('REDIS_HOST').toString(),
+            port: Number(
+              gCloudSecretManagerService.getSecret('REDIS_PORT').toString(),
+            ),
+          },
+        };
+      },
+    }),
+    BullModule.registerQueueAsync({
+      name: 'rating-queue',
+    }),
   ],
   exports: [ElasticsearchModule],
   providers: [
